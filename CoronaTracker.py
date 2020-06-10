@@ -167,7 +167,7 @@ class Spread:
 
 # In[ ]:
 
-
+"""
 class Edge:
     def __init__(self, start_loc, end_loc, strength=0):
         self.start_loc = start_loc
@@ -178,11 +178,12 @@ class Edge:
     def addSpread(self, spread):
         self.spreads.append(spread)
         self.strength += spread.strength
+"""
 
 
 # In[1]:
 
-
+"""
 class Location:
     def __init__(self, location):
         self.location = location
@@ -191,6 +192,7 @@ class Location:
     def addSpread(self, case_id, end_location, strength=1):
         edge = (case_id, end_location, strength)
         self.edges.append(edge)
+"""
 
 
 # In[6]:
