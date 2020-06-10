@@ -3,15 +3,24 @@ import sqlite3
 import csv
 
 def run():
+    """Main execution method for the module. Will take the information stored in the database to appropriately
+        analyze the sequences and find their closest relative via FOGSAA.
+        NOTE: GenerateSQL.py must be run prior to this module."""
+
     conn = sqlite3.connect('Sequences.db')
     curs_main = conn.cursor()
     curs_supp = conn.cursor()
     sql_index = 2
     spreads = []
 
+    """This section will loop through every sequence available in the details table, retrieve its sequence
+        as well as the sequences of any samples which have come in the prior 40 days (days can be adjusted)
+        and then compare them to find the primary sample's best match, storing the two as a spread in a list."""
+
     curs_main.execute('''SELECT * FROM details WHERE rowid=?;''', [sql_index])
     current_row = curs_main.fetchone()
-    while current_row:
+    #Only retrieve information on sequences which have a date and sequence available.
+    while current_row and current_row[2]:
         curs_main.execute('''SELECT genome FROM nucleotides WHERE id=?;''', [current_row[0]])
         current_genome = curs_main.fetchone()
         if not current_genome:
@@ -49,6 +58,7 @@ def run():
 
     curs_supp.close()
 
+    #Once all samples have been analyzed, stores the list of spreads in the spreads table.
     for spread in spreads:
         print('Inserting spread into DB:' + str(spread))
         curs_main.execute('''INSERT INTO spreads VALUES (?, ?, ?, ?, ?);''',

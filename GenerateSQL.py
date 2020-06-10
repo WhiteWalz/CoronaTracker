@@ -8,6 +8,8 @@ def run():
     generateDetailTable()
 
 def generateDB():
+    """Method which will create the database file and three tables for the data,
+        if said file and tables don't exist."""
     conn = sqlite3.connect('Sequences.db')
     curs = conn.cursor()
 
@@ -23,6 +25,7 @@ def generateDB():
     conn.close()
 
 def generateNucleotideTable(fastaFile='sequences.fasta'):
+    """Parses the fasta file into the appropriate table in the SQLite database."""
     conn = sqlite3.connect('Sequences.db')
     curs = conn.cursor()
     for record in SeqIO.parse(fastaFile, "fasta"):
@@ -34,6 +37,8 @@ def generateNucleotideTable(fastaFile='sequences.fasta'):
     conn.close()
 
 def generateDetailTable(csvFile='sequences.csv'):
+    """Parses the csv file into the appropriate table.
+        NOTE: Does require the csv to be formatted as specified in the readme."""
     conn = sqlite3.connect('Sequences.db')
     curs = conn.cursor()
     with open(csvFile) as fil:
